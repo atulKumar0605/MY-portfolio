@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Docs | Atul Kumar</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body class="docs-page">
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <button class="back-top" type="button" aria-label="Back to top">↑</button>
+
+    <header class="docs-shell">
+      <nav class="nav">
+        <a class="logo" href="index.html">AK</a>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links">
+          <a href="index.html#about">About</a>
+          <a href="index.html#skills">Skills</a>
+          <a href="index.html#education">Education</a>
+          <a href="docs.html" class="active">Task Docs</a>
+          <a href="index.html#contact">Contact</a>
+          <div class="theme-switcher" aria-label="Appearance">
+            <button type="button" data-theme-choice="light">Light</button>
+            <button type="button" data-theme-choice="dark">Dark</button>
+            <button type="button" data-theme-choice="system">System</button>
+          </div>
+        </div>
+      </nav>
+
+      <section class="docs-hero">
+        <p class="role-strip">Private Task Documentation</p>
+        <h1>Task Docs</h1>
+        <p class="subtitle">
+          Registered users can read task documentation after login. Upload access is restricted to the admin account only.
+        </p>
+      </section>
+    </header>
+
+    <main class="docs-main">
+      <section class="section docs-auth" id="auth-section">
+        <div>
+          <h2>Login</h2>
+          <form class="auth-form" id="login-form" novalidate>
+            <label>
+              Email
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" autocomplete="current-password" required />
+            </label>
+            <button class="btn" type="submit">Login</button>
+          </form>
+        </div>
+
+        <div>
+          <h2>Register</h2>
+          <form class="auth-form" id="register-form" novalidate>
+            <label>
+              Name
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" autocomplete="new-password" minlength="8" required />
+            </label>
+            <button class="btn ghost" type="submit">Register</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="section docs-dashboard is-hidden" id="docs-dashboard">
+        <div class="docs-toolbar">
+          <div>
+            <h2>Documentation</h2>
+            <p id="user-status"></p>
+          </div>
+          <div class="account-actions">
+            <button class="profile-button" type="button" id="profile-button" aria-expanded="false">
+              <span id="profile-avatar">AK</span>
+              <span>
+                <strong id="profile-name">Profile</strong>
+                <small id="profile-role">User</small>
+              </span>
+            </button>
+            <button class="btn ghost" type="button" id="logout-button">Logout</button>
+          </div>
+        </div>
+
+        <div class="profile-panel is-hidden" id="profile-panel">
+          <div>
+            <span>Name</span>
+            <strong id="profile-detail-name">-</strong>
+          </div>
+          <div>
+            <span>Email</span>
+            <strong id="profile-detail-email">-</strong>
+          </div>
+          <div>
+            <span>Access</span>
+            <strong id="profile-detail-role">-</strong>
+          </div>
+        </div>
+
+        <div class="docs-insights" aria-label="Documentation overview">
+          <div>
+            <span id="doc-count">0</span>
+            <strong>Total docs</strong>
+          </div>
+          <div>
+            <span id="pdf-count">0</span>
+            <strong>PDF files</strong>
+          </div>
+          <div>
+            <span id="category-count">0</span>
+            <strong>Categories</strong>
+          </div>
+        </div>
+
+        <div class="docs-controls">
+          <label>
+            Search docs
+            <input type="search" id="doc-search" placeholder="Search title, category, notes..." />
+          </label>
+          <label>
+            Category
+            <select id="doc-category">
+              <option value="all">All categories</option>
+            </select>
+          </label>
+        </div>
+
+        <form class="doc-upload is-hidden" id="doc-form">
+          <h3>Add Task Documentation</h3>
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            Category
+            <input type="text" name="category" placeholder="DevOps, Kubernetes, Internship..." />
+          </label>
+          <label>
+            Documentation notes
+            <textarea name="content" rows="8" placeholder="Optional notes about this PDF or task"></textarea>
+          </label>
+          <label>
+            PDF document
+            <input type="file" name="pdf" accept="application/pdf,.pdf" />
+          </label>
+          <button class="btn" type="submit">Publish Doc</button>
+        </form>
+
+        <div class="doc-list" id="doc-list"></div>
+      </section>
+
+      <p class="form-message" id="form-message" role="status"></p>
+    </main>
+  </body>
+</html>

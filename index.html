@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atul Kumar | Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="scroll-progress" aria-hidden="true"><span></span></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <button class="back-top" type="button" aria-label="Back to top">↑</button>
+    <header class="hero">
+      <nav class="nav">
+        <div class="logo">AK</div>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="nav-links">
+          <a href="#about">About</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#achievements">Achievements</a>
+          <a href="#animations">Animations</a>
+          <a href="docs.html">Task Docs</a>
+          <a href="#contact">Contact</a>
+          <div class="theme-switcher" aria-label="Appearance">
+            <button type="button" data-theme-choice="light">Light</button>
+            <button type="button" data-theme-choice="dark">Dark</button>
+            <button type="button" data-theme-choice="system">System</button>
+          </div>
+        </div>
+      </nav>
+      <div class="hero-layout">
+        <div class="hero-content">
+          <div class="role-strip" aria-label="Current role">
+            <span class="devops-mark" aria-hidden="true">
+              <svg viewBox="0 0 64 36" role="img">
+                <path d="M20 30C10 30 4 24 4 18S10 6 20 6c7 0 11 4 16 12 4 7 8 12 14 12 6 0 10-5 10-12S56 6 50 6c-5 0-9 4-14 12" />
+                <path d="M18 14l-6 4 6 4M46 14l6 4-6 4" />
+              </svg>
+            </span>
+            <span class="role-text">DevOps Intern at Keen&amp;Able Computer Pvt. Ltd.</span>
+          </div>
+          <h1>Atul Kumar</h1>
+          <p class="subtitle">
+            DevOps intern with hands-on knowledge of C, Core Java, and JavaScript.
+            Quick learner with a strong interest in software development, Git collaboration, and cloud-native technologies.
+          </p>
+          <div class="cta">
+            <a class="btn" href="#contact">Get in touch</a>
+            <a class="btn ghost" href="https://www.linkedin.com/in/atul-kumar-a088ba296" target="_blank" rel="noreferrer">LinkedIn Profile</a>
+            <a class="btn ghost" href="https://www.instagram.com/_rajputana_atul_?igsh=MW5ibG1mNWw2eDE3cQ==" target="_blank" rel="noreferrer">Instagram</a>
+            <a class="btn ghost" href="#projects">Kubernetes Learning</a>
+            <a class="btn ghost" href="docs.html">Task Docs</a>
+          </div>
+        </div>
+        <img class="company-logo" src="assets/keenable-logo.png" alt="KeenAble Computer Pvt. Ltd. logo" />
+      </div>
+      <div class="hero-panel" aria-label="DevOps learning highlights">
+        <div>
+          <span>Current role</span>
+          <strong>DevOps Intern</strong>
+        </div>
+        <div>
+          <span>Company</span>
+          <strong>Keen&amp;Able Computer Pvt. Ltd.</strong>
+        </div>
+        <div>
+          <span>Goal</span>
+          <strong>Ship and deploy confidently</strong>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="about" class="section">
+        <h2>Profile Summary</h2>
+        <p>
+          Looking for an opportunity to enhance my technical skills and contribute to real-world projects.
+          This portfolio is hosted to practice Kubernetes deployment on a master and worker node setup.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <h3>Location</h3>
+            <p>Dadlana, Panipat, Haryana, India</p>
+          </div>
+          <div class="card">
+            <h3>Focus</h3>
+            <p>DevOps, Kubernetes, Cloud Fundamentals</p>
+          </div>
+          <div class="card">
+            <h3>Learning Goal</h3>
+            <p>Deploy static web apps and manage services on K8s</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="section alt">
+        <h2>Technical Skills</h2>
+        <div class="skill-controls" aria-label="Skill category filters">
+          <button class="skill-filter active" type="button" data-filter="all">All</button>
+          <button class="skill-filter" type="button" data-filter="programming">Programming</button>
+          <button class="skill-filter" type="button" data-filter="web">Web</button>
+          <button class="skill-filter" type="button" data-filter="devops">DevOps</button>
+        </div>
+        <div class="tags skill-list">
+          <span data-category="programming">C</span>
+          <span data-category="programming">Core Java</span>
+          <span data-category="web">JavaScript</span>
+          <span data-category="web">HTML</span>
+          <span data-category="web">CSS</span>
+          <span data-category="devops">Git</span>
+          <span data-category="devops">GitHub</span>
+          <span data-category="devops">Kubernetes</span>
+          <span data-category="devops">Docker Basics</span>
+        </div>
+        <h3>Soft Skills</h3>
+        <div class="tags">
+          <span>Communication</span><span>Time Management</span><span>Creativity</span><span>Collaboration</span>
+        </div>
+      </section>
+
+      <section id="education" class="section">
+        <h2>Education</h2>
+        <div class="timeline">
+          <div class="item">
+            <h3>Bachelor of Computer Applications (BCA)</h3>
+            <p>Chaudhary Charan Singh University</p>
+            <span>Expected completion: June 2026</span>
+          </div>
+          <div class="item">
+            <h3>Senior Secondary (Class XII)</h3>
+            <p>Haryana Board, 2022</p>
+            <span>Aggregate score: 74%</span>
+          </div>
+          <div class="item">
+            <h3>Secondary (Class X)</h3>
+            <p>CBSE Board, 2020</p>
+            <span>Aggregate score: 70%</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="achievements" class="section alt">
+        <h2>Achievements</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>Web Designing Certificate</h3>
+            <p>Infotech Computer Education, Thanabhawan</p>
+            <p>Specializing in HTML5 and CSS</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="animations" class="section animation-section">
+        <div class="section-heading">
+          <div>
+            <h2>Animation Lab</h2>
+            <p>
+              A small interactive area for trying motion styles on the portfolio.
+              Click the control to cycle through different animations.
+            </p>
+          </div>
+          <button class="btn animation-button" type="button" data-animation-button>Show Next Animation</button>
+        </div>
+        <div class="animation-lab" data-animation-mode="pulse" aria-live="polite">
+          <div class="animation-stage" aria-hidden="true">
+            <span class="animation-node node-one"></span>
+            <span class="animation-node node-two"></span>
+            <span class="animation-node node-three"></span>
+            <span class="animation-node node-four"></span>
+          </div>
+          <div class="animation-copy">
+            <span>Current animation</span>
+            <strong data-animation-name>Pulse Flow</strong>
+            <p data-animation-description>Soft scaling motion for highlighting active sections.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <h2>Kubernetes Learning</h2>
+        <p>
+          This site is containerized and deployed to my Kubernetes cluster for hands-on practice.
+          I use a master and worker node setup to learn deployments, services, and ingress routing.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <h3>Deployment</h3>
+            <p>Run the portfolio as a static web container with multiple replicas.</p>
+          </div>
+          <div class="card">
+            <h3>Service</h3>
+            <p>Expose the app internally and route traffic to pods.</p>
+          </div>
+          <div class="card">
+            <h3>Ingress</h3>
+            <p>Use an Ingress controller to expose the site publicly.</p>
+          </div>
+          <div class="card">
+            <h3>Version Control</h3>
+            <p>Track changes with Git and publish project updates through GitHub.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section alt">
+        <h2>Contact</h2>
+        <div class="contact">
+          <a href="tel:+917988551516">+91 7988551516</a>
+          <a href="mailto:k.atulkumar0605@gmail.com">k.atulkumar0605@gmail.com</a>
+          <a href="https://www.linkedin.com/in/atul-kumar-a088ba296" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://www.instagram.com/_rajputana_atul_?igsh=MW5ibG1mNWw2eDE3cQ==" target="_blank" rel="noreferrer">Instagram</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 Atul Kumar. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

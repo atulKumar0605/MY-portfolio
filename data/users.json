@@ -1,0 +1,20 @@
+[
+  {
+    "id": "ee09da18-c5c0-480d-8170-54917f06ddf6",
+    "email": "admin@portfolio.local",
+    "name": "Atul Kumar",
+    "role": "admin",
+    "salt": "05521e4b18afb873696470402583487c",
+    "passwordHash": "59e087b1ab21a65a066538322f2c3c0fe2248fdc8cf594f4b1cf9c3b2191248600c0776416cd9b932b11fbe83383de62e834f5a8ea810aa5151d584480f5b384",
+    "createdAt": "2026-06-23T11:21:53.427Z"
+  },
+  {
+    "id": "82e90d79-84e3-45bd-98dc-b8b422cc86ae",
+    "email": "k.atulkumar0605@gmail.com",
+    "name": "Atul Kumar",
+    "role": "user",
+    "salt": "be47105273c9b137803a1bf7b9a919f4",
+    "passwordHash": "638cedd35c5b9197156e50281f2917ff36896e2935464c231d6cd14acb4538f4269991cfd721d1f192a086973b16bb66c5d0ad5c3428a942d3f567e6614d85d6",
+    "createdAt": "2026-06-23T11:58:29.358Z"
+  }
+]
