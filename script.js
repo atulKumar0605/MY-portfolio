@@ -36,6 +36,9 @@ const animationLab = document.querySelector("[data-animation-mode]");
 const animationButton = document.querySelector("[data-animation-button]");
 const animationName = document.querySelector("[data-animation-name]");
 const animationDescription = document.querySelector("[data-animation-description]");
+const resumeOpenButton = document.querySelector("[data-resume-open]");
+const resumeModal = document.querySelector("[data-resume-modal]");
+const resumeCloseButtons = document.querySelectorAll("[data-resume-close]");
 const systemTheme = window.matchMedia("(prefers-color-scheme: light)");
 let allDocs = [];
 const isFileProtocol = window.location.protocol === "file:";
@@ -225,6 +228,40 @@ const updateAnimationMode = (index) => {
 animationButton?.addEventListener("click", () => {
   animationIndex = (animationIndex + 1) % animationModes.length;
   updateAnimationMode(animationIndex);
+});
+
+const openResumeModal = () => {
+  if (!resumeModal) {
+    return;
+  }
+
+  resumeModal.classList.add("is-open");
+  resumeModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("resume-open");
+  resumeModal.querySelector("[data-resume-close]")?.focus();
+};
+
+const closeResumeModal = () => {
+  if (!resumeModal) {
+    return;
+  }
+
+  resumeModal.classList.remove("is-open");
+  resumeModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("resume-open");
+  resumeOpenButton?.focus();
+};
+
+resumeOpenButton?.addEventListener("click", openResumeModal);
+
+resumeCloseButtons.forEach((button) => {
+  button.addEventListener("click", closeResumeModal);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && resumeModal?.classList.contains("is-open")) {
+    closeResumeModal();
+  }
 });
 
 const apiRequest = async (path, options = {}) => {

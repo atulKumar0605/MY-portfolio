@@ -57,6 +57,7 @@
             <a class="btn ghost" href="https://www.instagram.com/_rajputana_atul_?igsh=MW5ibG1mNWw2eDE3cQ==" target="_blank" rel="noreferrer">Instagram</a>
             <a class="btn ghost" href="#projects">Kubernetes Learning</a>
             <a class="btn ghost" href="docs.html">Task Docs</a>
+            <button class="btn resume-trigger" type="button" data-resume-open>View Resume</button>
           </div>
         </div>
         <img class="company-logo" src="assets/keenable-logo.png" alt="KeenAble Computer Pvt. Ltd. logo" />
@@ -223,5 +224,24 @@
     <footer>
       <p>© 2026 Atul Kumar. All rights reserved.</p>
     </footer>
+
+    <div class="resume-modal" data-resume-modal aria-hidden="true">
+      <div class="resume-backdrop" data-resume-close></div>
+      <section class="resume-viewer" role="dialog" aria-modal="true" aria-labelledby="resume-title">
+        <header class="resume-toolbar">
+          <h2 id="resume-title">Atul_Kumar.pdf</h2>
+          <div class="resume-actions">
+            <a class="resume-icon-button" href="assets/Atul_Kumar.pdf" download="Atul_Kumar_Resume.pdf" aria-label="Download resume" title="Download resume">⇩</a>
+            <button class="resume-icon-button" type="button" data-resume-close aria-label="Close resume" title="Close resume">×</button>
+          </div>
+        </header>
+        <div class="resume-page-wrap">
+          <img class="resume-page" src="assets/Atul_Kumar-preview.png" alt="Atul Kumar resume preview" />
+        </div>
+        <div class="resume-download-bar">
+          <a class="btn" href="assets/Atul_Kumar.pdf" download="Atul_Kumar_Resume.pdf">Download Resume</a>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

@@ -63,6 +63,10 @@ body.menu-open {
   overflow: hidden;
 }
 
+body.resume-open {
+  overflow: hidden;
+}
+
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -399,6 +403,145 @@ h1 {
   background: var(--panel);
   border-color: var(--line);
   color: var(--text);
+}
+
+.resume-trigger {
+  cursor: pointer;
+}
+
+.resume-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.resume-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resume-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+}
+
+.resume-viewer {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 1fr;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.resume-toolbar,
+.resume-download-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #f7f7f7;
+}
+
+.resume-toolbar h2 {
+  overflow: hidden;
+  color: #f7f7f7;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resume-toolbar {
+  position: fixed;
+  top: 14px;
+  left: 18px;
+  right: 18px;
+  z-index: 2;
+  min-height: 40px;
+  padding: 0;
+  pointer-events: none;
+}
+
+.resume-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.resume-icon-button {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(32, 32, 32, 0.56);
+  color: #f7f7f7;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.resume-icon-button:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.resume-page-wrap {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 72px 24px 82px;
+}
+
+.resume-page {
+  display: block;
+  width: auto;
+  height: calc(100vh - 154px);
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 154px);
+  object-fit: contain;
+}
+
+.resume-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.resume-download-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  z-index: 2;
+  justify-content: center;
+  padding: 0;
+  transform: translateX(-50%);
+}
+
+.resume-download-bar .btn {
+  width: auto;
+  white-space: nowrap;
 }
 
 .hero-panel {
@@ -1260,6 +1403,15 @@ footer {
   .profile-panel {
     grid-template-columns: 1fr;
   }
+
+  .resume-modal {
+    padding: 0;
+  }
+
+  .resume-viewer {
+    width: 100vw;
+    height: 100vh;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1300,5 +1452,47 @@ footer {
 
   .animation-button {
     width: 100%;
+  }
+
+  .resume-modal {
+    padding: 0;
+  }
+
+  .resume-viewer {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .resume-toolbar {
+    align-items: flex-start;
+    top: 10px;
+    left: 12px;
+    right: 12px;
+    padding: 12px;
+  }
+
+  .resume-toolbar h2 {
+    font-size: 18px;
+  }
+
+  .resume-page-wrap {
+    padding: 64px 10px 76px;
+  }
+
+  .resume-page {
+    height: calc(100vh - 140px);
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 140px);
+  }
+
+  .resume-icon-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .resume-download-bar {
+    bottom: 12px;
+    padding: 0;
   }
 }
