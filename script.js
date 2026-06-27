@@ -1,5 +1,6 @@
 const menuToggle = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector(".nav-links");
+const nav = document.querySelector(".nav");
 const navItems = document.querySelectorAll(".nav-links a");
 const sections = document.querySelectorAll("main section");
 const revealItems = document.querySelectorAll(".section, .card, .timeline .item, .tags span, .skill-card");
@@ -101,6 +102,16 @@ if (cursorDot && cursorGlow && window.matchMedia("(pointer: fine)").matches) {
   let glowY = 0;
   let hasMoved = false;
 
+  const setCursorSize = (target) => {
+    const rect = target.getBoundingClientRect();
+    const isNavShell = target === nav;
+    const height = Math.round(isNavShell ? rect.height - 18 : rect.height + 4);
+    const width = Math.round(isNavShell ? Math.max(74, height * 1.45) : rect.width + 10);
+    document.documentElement.style.setProperty("--cursor-width", `${width}px`);
+    document.documentElement.style.setProperty("--cursor-height", `${height}px`);
+    document.documentElement.style.setProperty("--cursor-radius", window.getComputedStyle(target).borderRadius || "16px");
+  };
+
   const moveCursor = () => {
     glowX += (mouseX - glowX) * 0.42;
     glowY += (mouseY - glowY) * 0.42;
@@ -119,16 +130,27 @@ if (cursorDot && cursorGlow && window.matchMedia("(pointer: fine)").matches) {
       glowY = mouseY;
       hasMoved = true;
     }
-    document.body.classList.add("cursor-ready");
   });
 
   document.addEventListener("mouseleave", () => {
-    document.body.classList.remove("cursor-ready");
+    document.body.classList.remove("cursor-nav-hover", "cursor-nav-active");
   });
 
-  document.querySelectorAll("a, button, .card, .tags span").forEach((item) => {
-    item.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
-    item.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
+  nav?.addEventListener("mouseenter", () => {
+    document.body.classList.add("cursor-nav-hover");
+    setCursorSize(nav);
+  });
+
+  nav?.addEventListener("mouseleave", () => {
+    document.body.classList.remove("cursor-nav-hover", "cursor-nav-active");
+  });
+
+  nav?.querySelectorAll("a, button").forEach((item) => {
+    item.addEventListener("mouseenter", () => {
+      document.body.classList.add("cursor-nav-active");
+      setCursorSize(item);
+    });
+    item.addEventListener("mouseleave", () => document.body.classList.remove("cursor-nav-active"));
   });
 
   moveCursor();

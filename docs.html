@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Docs | Atul Kumar</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -15,23 +16,33 @@
 
     <header class="docs-shell">
       <nav class="nav">
-        <a class="logo" href="index.html">AK</a>
-        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <a class="brand" href="index.html" aria-label="Atul Kumar portfolio home">
+          <span class="logo">AK</span>
+          <span class="brand-copy">
+            <strong>Atul Kumar</strong>
+            <small>DevOps Mission Control</small>
+          </span>
+        </a>
         <div class="nav-links">
-          <a href="index.html#about">About</a>
-          <a href="index.html#skills">Skills</a>
-          <a href="index.html#education">Education</a>
-          <a href="docs.html" class="active">Task Docs</a>
-          <a href="index.html#contact">Contact</a>
+          <a href="index.html#about" data-step="01">About</a>
+          <a href="index.html#skills" data-step="02">Skills</a>
+          <a href="index.html#education" data-step="03">Journey</a>
+          <a href="index.html#achievements" data-step="04">Wins</a>
+          <a href="index.html#animations" data-step="05">Lab</a>
+          <a href="index.html#contact" data-step="06">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-docs active" href="docs.html">Docs</a>
           <div class="theme-switcher" aria-label="Appearance">
             <button type="button" data-theme-choice="light">Light</button>
             <button type="button" data-theme-choice="dark">Dark</button>
             <button type="button" data-theme-choice="system">System</button>
           </div>
+          <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </nav>
 

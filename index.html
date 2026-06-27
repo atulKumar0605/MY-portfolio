@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Atul Kumar | Portfolio</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -14,25 +15,33 @@
     <button class="back-top" type="button" aria-label="Back to top">↑</button>
     <header class="hero">
       <nav class="nav">
-        <div class="logo">AK</div>
-        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <a class="brand" href="#about" aria-label="Atul Kumar portfolio home">
+          <span class="logo">AK</span>
+          <span class="brand-copy">
+            <strong>Atul Kumar</strong>
+            <small>DevOps Mission Control</small>
+          </span>
+        </a>
         <div class="nav-links">
-          <a href="#about">About</a>
-          <a href="#skills">Skills</a>
-          <a href="#education">Education</a>
-          <a href="#achievements">Achievements</a>
-          <a href="#animations">Animations</a>
-          <a href="docs.html">Task Docs</a>
-          <a href="#contact">Contact</a>
+          <a href="#about" data-step="01">About</a>
+          <a href="#skills" data-step="02">Skills</a>
+          <a href="#education" data-step="03">Journey</a>
+          <a href="#achievements" data-step="04">Wins</a>
+          <a href="#animations" data-step="05">Lab</a>
+          <a href="#contact" data-step="06">Contact</a>
+        </div>
+        <div class="nav-actions">
+          <a class="nav-docs" href="docs.html">Docs</a>
           <div class="theme-switcher" aria-label="Appearance">
             <button type="button" data-theme-choice="light">Light</button>
             <button type="button" data-theme-choice="dark">Dark</button>
             <button type="button" data-theme-choice="system">System</button>
           </div>
+          <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </nav>
       <div class="hero-layout">
