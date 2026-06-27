@@ -673,7 +673,64 @@ h1 {
   font-weight: 700;
 }
 
-.skill-list span.is-hidden {
+.skill-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin: 12px 0 28px;
+}
+
+.skill-card {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: start;
+  gap: 14px;
+  min-height: 152px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(67, 208, 138, 0.44);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.18);
+}
+
+.skill-card img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 7px;
+}
+
+.skill-card h3 {
+  margin: 4px 0 8px;
+  color: var(--accent-strong);
+  font-size: 18px;
+}
+
+.skill-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.skill-category {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.skill-card.is-hidden {
   display: none;
 }
 
@@ -1293,7 +1350,8 @@ footer {
 .section,
 .card,
 .timeline .item,
-.tags span {
+.tags span,
+.skill-card {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 500ms ease, transform 500ms ease, border-color 180ms ease, box-shadow 180ms ease;
@@ -1302,7 +1360,8 @@ footer {
 .section.in-view,
 .card.in-view,
 .timeline .item.in-view,
-.tags span.in-view {
+.tags span.in-view,
+.skill-card.in-view {
   opacity: 1;
   transform: translateY(0);
 }
