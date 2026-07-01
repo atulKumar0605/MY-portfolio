@@ -1253,30 +1253,34 @@ h1 {
 }
 
 .docs-auth > div,
-.doc-upload {
+.doc-upload,
+.task-form {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   padding: 24px;
 }
 
-.auth-form,
-.doc-upload {
+.doc-upload,
+.task-form {
   display: grid;
   gap: 14px;
 }
 
-.auth-form label,
-.doc-upload label {
+.doc-upload label,
+.task-form label,
+.task-complete-form label {
   display: grid;
   gap: 8px;
   color: var(--muted);
   font-weight: 700;
 }
 
-.auth-form input,
 .doc-upload input,
-.doc-upload textarea {
+.doc-upload textarea,
+.task-form input,
+.task-form textarea,
+.task-complete-form textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1287,14 +1291,16 @@ h1 {
   outline: none;
 }
 
-.auth-form input:focus,
 .doc-upload input:focus,
-.doc-upload textarea:focus {
+.doc-upload textarea:focus,
+.task-form input:focus,
+.task-form textarea:focus,
+.task-complete-form textarea:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(67, 208, 138, 0.12);
 }
 
-.auth-form input.invalid {
+.task-complete-form textarea.invalid {
   border-color: #ef4444;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14);
 }
@@ -1327,70 +1333,33 @@ h1 {
   gap: 12px;
 }
 
-.profile-button {
-  display: inline-flex;
-  align-items: center;
+.dashboard-tabs {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  min-height: 46px;
+}
+
+.dashboard-tab {
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
   color: var(--text);
   cursor: pointer;
-  padding: 8px 12px;
-  text-align: left;
+  font-weight: 800;
+  padding: 10px 14px;
 }
 
-.profile-button:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.profile-button > span:first-child {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 50%;
+.dashboard-tab:hover,
+.dashboard-tab.active {
   background: var(--accent);
+  border-color: var(--accent);
   color: var(--button-text);
-  font-weight: 800;
 }
 
-.profile-button strong,
-.profile-button small {
-  display: block;
-  line-height: 1.15;
-}
-
-.profile-button small {
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
-  margin-top: 3px;
-}
-
-.profile-panel {
+.dashboard-panel {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--panel);
-  padding: 18px;
-}
-
-.profile-panel span {
-  display: block;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
-  margin-bottom: 4px;
-}
-
-.profile-panel strong {
-  color: var(--text);
-  overflow-wrap: anywhere;
+  gap: 22px;
 }
 
 .docs-insights {
@@ -1542,6 +1511,190 @@ h1 {
   border-color: var(--accent);
   color: var(--accent);
   transform: translateY(-2px);
+}
+
+.task-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.task-column {
+  min-height: 320px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 16px;
+}
+
+.task-column > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.task-column > header span {
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.task-column > header strong {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(67, 208, 138, 0.12);
+  color: var(--accent-strong);
+}
+
+.task-list {
+  display: grid;
+  gap: 12px;
+}
+
+.task-card,
+.task-empty {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-soft);
+  padding: 14px;
+}
+
+.task-card span {
+  color: var(--accent-strong);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.task-card h3 {
+  color: var(--text);
+  font-size: 17px;
+  margin: 6px 0 8px;
+}
+
+.task-card p,
+.task-empty {
+  color: var(--muted);
+}
+
+.task-card p {
+  margin: 0 0 12px;
+}
+
+.task-meta {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.task-meta small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.task-attachment {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.task-attachment img {
+  width: 100%;
+  max-height: 170px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.task-attachment a {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 36px;
+  align-items: center;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  color: var(--accent);
+  font-weight: 800;
+  padding: 8px 10px;
+}
+
+.task-attachment a:hover {
+  background: var(--accent);
+  color: var(--button-text);
+}
+
+.task-attachment small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-actions button {
+  min-height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 800;
+  padding: 8px 10px;
+}
+
+.task-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.task-complete-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.task-complete-form button {
+  min-height: 38px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--button-text);
+  cursor: pointer;
+  font-weight: 900;
+  padding: 9px 12px;
+}
+
+.task-complete-form button:hover {
+  transform: translateY(-1px);
+}
+
+.task-completion-note {
+  border: 1px solid rgba(67, 208, 138, 0.28);
+  border-radius: 8px;
+  background: rgba(67, 208, 138, 0.08);
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.task-completion-note strong {
+  color: var(--accent-strong);
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.task-completion-note p {
+  margin: 0;
 }
 
 .form-message {
@@ -1708,7 +1861,8 @@ footer {
   }
 
   .docs-insights,
-  .docs-controls {
+  .docs-controls,
+  .task-board {
     grid-template-columns: 1fr;
   }
 
@@ -1724,13 +1878,8 @@ footer {
     width: 100%;
   }
 
-  .profile-button,
   .account-actions .btn {
     width: 100%;
-  }
-
-  .profile-panel {
-    grid-template-columns: 1fr;
   }
 
   .resume-modal {

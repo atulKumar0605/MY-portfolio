@@ -5,6 +5,10 @@ metadata:
   namespace: portfolio
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - portfolio.192.168.122.147.sslip.io
+      secretName: portfolio-tls
   rules:
     - host: portfolio.192.168.122.147.sslip.io
       http:

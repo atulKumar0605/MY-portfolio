@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Atul Kumar | Portfolio</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
@@ -15,33 +14,25 @@
     <button class="back-top" type="button" aria-label="Back to top">↑</button>
     <header class="hero">
       <nav class="nav">
-        <a class="brand" href="#about" aria-label="Atul Kumar portfolio home">
-          <span class="logo">AK</span>
-          <span class="brand-copy">
-            <strong>Atul Kumar</strong>
-            <small>DevOps Mission Control</small>
-          </span>
-        </a>
+        <div class="logo">AK</div>
+        <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         <div class="nav-links">
           <a href="#about">About</a>
           <a href="#skills">Skills</a>
-          <a href="#education">Journey</a>
-          <a href="#achievements">Wins</a>
-          <a href="#animations">Lab</a>
+          <a href="#education">Education</a>
+          <a href="#achievements">Achievements</a>
+          <a href="#animations">Animations</a>
+          <a href="docs.html">Task Docs</a>
           <a href="#contact">Contact</a>
-        </div>
-        <div class="nav-actions">
-          <a class="nav-docs" href="docs.html">Docs</a>
           <div class="theme-switcher" aria-label="Appearance">
             <button type="button" data-theme-choice="light">Light</button>
             <button type="button" data-theme-choice="dark">Dark</button>
             <button type="button" data-theme-choice="system">System</button>
           </div>
-          <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
       </nav>
       <div class="hero-layout">
@@ -57,7 +48,7 @@
           </div>
           <h1>Atul Kumar</h1>
           <p class="subtitle">
-            DevOps intern with hands-on knowledge of Core JavaScript, Linux, Docker, Kubernetes, Jenkins, Git, and GitHub.
+            DevOps intern with hands-on knowledge of C, Core Java, and JavaScript.
             Quick learner with a strong interest in software development, Git collaboration, and cloud-native technologies.
           </p>
           <div class="cta">
@@ -114,68 +105,19 @@
         <div class="skill-controls" aria-label="Skill category filters">
           <button class="skill-filter active" type="button" data-filter="all">All</button>
           <button class="skill-filter" type="button" data-filter="programming">Programming</button>
-          <button class="skill-filter" type="button" data-filter="platform">Platform</button>
-          <button class="skill-filter" type="button" data-filter="containers">Containers</button>
-          <button class="skill-filter" type="button" data-filter="cicd">CI/CD</button>
-          <button class="skill-filter" type="button" data-filter="version-control">Version Control</button>
+          <button class="skill-filter" type="button" data-filter="web">Web</button>
+          <button class="skill-filter" type="button" data-filter="devops">DevOps</button>
         </div>
-        <div class="skill-list" aria-label="Technical skill categories">
-          <article class="skill-card" data-category="programming">
-            <img src="https://cdn.simpleicons.org/javascript/F7DF1E" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Programming</span>
-              <h3>Core JavaScript</h3>
-              <p>Language fundamentals, DOM behavior, and browser scripting.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="platform">
-            <img src="https://cdn.simpleicons.org/linux/FCC624" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Platform</span>
-              <h3>Linux</h3>
-              <p>Terminal workflow, file permissions, processes, and server basics.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="containers">
-            <img src="https://cdn.simpleicons.org/docker/2496ED" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Containers</span>
-              <h3>Docker</h3>
-              <p>Image builds, containers, ports, volumes, and service packaging.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="containers">
-            <img src="https://cdn.simpleicons.org/kubernetes/326CE5" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Orchestration</span>
-              <h3>Kubernetes</h3>
-              <p>Deployments, services, pods, manifests, and cluster practice.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="cicd">
-            <img src="https://cdn.simpleicons.org/jenkins/D24939" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">CI/CD</span>
-              <h3>Jenkins</h3>
-              <p>Pipeline basics, build stages, and automation workflows.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="version-control">
-            <img src="https://cdn.simpleicons.org/git/F05032" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Version Control</span>
-              <h3>Git</h3>
-              <p>Commits, branches, merging, and project history tracking.</p>
-            </div>
-          </article>
-          <article class="skill-card" data-category="version-control">
-            <img src="https://cdn.simpleicons.org/github/181717" alt="" loading="lazy" />
-            <div>
-              <span class="skill-category">Collaboration</span>
-              <h3>GitHub</h3>
-              <p>Repositories, pull requests, issue tracking, and hosted code.</p>
-            </div>
-          </article>
+        <div class="tags skill-list">
+          <span data-category="programming">C</span>
+          <span data-category="programming">Core Java</span>
+          <span data-category="web">JavaScript</span>
+          <span data-category="web">HTML</span>
+          <span data-category="web">CSS</span>
+          <span data-category="devops">Git</span>
+          <span data-category="devops">GitHub</span>
+          <span data-category="devops">Kubernetes</span>
+          <span data-category="devops">Docker Basics</span>
         </div>
         <h3>Soft Skills</h3>
         <div class="tags">
@@ -252,7 +194,7 @@
             <h3>Deployment</h3>
             <p>Run the portfolio as a static web container with multiple replicas.</p>
           </div>
-          <div class="card">
+          <div class="card">1
             <h3>Service</h3>
             <p>Expose the app internally and route traffic to pods.</p>
           </div>
@@ -293,7 +235,7 @@
         </header>
         <div class="resume-page-wrap">
           <img class="resume-page" src="assets/Atul_Kumar-preview.png" alt="Atul Kumar resume preview" />
-        </div>
+        </div>  
         <div class="resume-download-bar">
           <a class="btn" href="assets/Atul_Kumar.pdf" download="Atul_Kumar_Resume.pdf">Download Resume</a>
         </div>

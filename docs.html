@@ -50,131 +50,131 @@
         <p class="role-strip">Private Task Documentation</p>
         <h1>Task Docs</h1>
         <p class="subtitle">
-          Registered users can read task documentation after login. Upload access is restricted to the admin account only.
+          Assign tasks, move work through status stages, and publish completion documentation in one workspace.
         </p>
       </section>
     </header>
 
     <main class="docs-main">
-      <section class="section docs-auth" id="auth-section">
-        <div>
-          <h2>Login</h2>
-          <form class="auth-form" id="login-form" novalidate>
-            <label>
-              Email
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
-            <label>
-              Password
-              <input type="password" name="password" autocomplete="current-password" required />
-            </label>
-            <button class="btn" type="submit">Login</button>
-          </form>
-        </div>
-
-        <div>
-          <h2>Register</h2>
-          <form class="auth-form" id="register-form" novalidate>
-            <label>
-              Name
-              <input type="text" name="name" autocomplete="name" required />
-            </label>
-            <label>
-              Email
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
-            <label>
-              Password
-              <input type="password" name="password" autocomplete="new-password" minlength="8" required />
-            </label>
-            <button class="btn ghost" type="submit">Register</button>
-          </form>
-        </div>
-      </section>
-
-      <section class="section docs-dashboard is-hidden" id="docs-dashboard">
+      <section class="section docs-dashboard" id="docs-dashboard">
         <div class="docs-toolbar">
           <div>
-            <h2>Documentation</h2>
-            <p id="user-status"></p>
+            <h2>Task Workspace</h2>
+            <p id="user-status">Assign, track, and document task progress.</p>
           </div>
           <div class="account-actions">
-            <button class="profile-button" type="button" id="profile-button" aria-expanded="false">
-              <span id="profile-avatar">AK</span>
-              <span>
-                <strong id="profile-name">Profile</strong>
-                <small id="profile-role">User</small>
-              </span>
-            </button>
-            <button class="btn ghost" type="button" id="logout-button">Logout</button>
+            <button class="btn assign-task-trigger" type="button" id="assign-task-button">Assign Task</button>
           </div>
         </div>
 
-        <div class="profile-panel is-hidden" id="profile-panel">
-          <div>
-            <span>Name</span>
-            <strong id="profile-detail-name">-</strong>
-          </div>
-          <div>
-            <span>Email</span>
-            <strong id="profile-detail-email">-</strong>
-          </div>
-          <div>
-            <span>Access</span>
-            <strong id="profile-detail-role">-</strong>
-          </div>
+        <div class="dashboard-tabs" role="tablist" aria-label="Dashboard views">
+          <button class="dashboard-tab active" type="button" data-dashboard-tab="docs">Documentation</button>
+          <button class="dashboard-tab" type="button" data-dashboard-tab="tasks">Tasks</button>
         </div>
 
-        <div class="docs-insights" aria-label="Documentation overview">
-          <div>
-            <span id="doc-count">0</span>
-            <strong>Total docs</strong>
+        <div class="dashboard-panel" id="docs-panel">
+          <div class="docs-insights" aria-label="Documentation overview">
+            <div>
+              <span id="doc-count">0</span>
+              <strong>Total docs</strong>
+            </div>
+            <div>
+              <span id="pdf-count">0</span>
+              <strong>PDF files</strong>
+            </div>
+            <div>
+              <span id="category-count">0</span>
+              <strong>Categories</strong>
+            </div>
           </div>
-          <div>
-            <span id="pdf-count">0</span>
-            <strong>PDF files</strong>
+
+          <div class="docs-controls">
+            <label>
+              Search docs
+              <input type="search" id="doc-search" placeholder="Search title, category, notes..." />
+            </label>
+            <label>
+              Category
+              <select id="doc-category">
+                <option value="all">All categories</option>
+              </select>
+            </label>
           </div>
-          <div>
-            <span id="category-count">0</span>
-            <strong>Categories</strong>
-          </div>
+
+          <form class="doc-upload" id="doc-form">
+            <h3>Add Task Documentation</h3>
+            <label>
+              Title
+              <input type="text" name="title" required />
+            </label>
+            <label>
+              Category
+              <input type="text" name="category" placeholder="DevOps, Kubernetes, Internship..." />
+            </label>
+            <label>
+              Documentation notes
+              <textarea name="content" rows="8" placeholder="Optional notes about this PDF or task"></textarea>
+            </label>
+            <label>
+              PDF document
+              <input type="file" name="pdf" accept="application/pdf,.pdf" />
+            </label>
+            <button class="btn" type="submit">Publish Doc</button>
+          </form>
+
+          <div class="doc-list" id="doc-list"></div>
         </div>
 
-        <div class="docs-controls">
-          <label>
-            Search docs
-            <input type="search" id="doc-search" placeholder="Search title, category, notes..." />
-          </label>
-          <label>
-            Category
-            <select id="doc-category">
-              <option value="all">All categories</option>
-            </select>
-          </label>
+        <div class="dashboard-panel is-hidden" id="tasks-panel">
+          <form class="task-form is-hidden" id="task-form">
+            <h3>Assign Task</h3>
+            <label>
+              Task title
+              <input type="text" name="title" placeholder="Deploy portfolio on Kubernetes" required />
+            </label>
+            <label>
+              Assigned to
+              <input type="text" name="assignee" placeholder="Atul Kumar" />
+            </label>
+            <label>
+              Due date
+              <input type="date" name="dueDate" />
+            </label>
+            <label>
+              Task details
+              <textarea name="description" rows="5" placeholder="Write the expected work, commands, or deliverables..."></textarea>
+            </label>
+            <label>
+              Attachment
+              <input type="file" name="attachment" />
+            </label>
+            <button class="btn" type="submit">Assign Task</button>
+          </form>
+
+          <div class="task-board" aria-label="Task board">
+            <section class="task-column" data-task-status="assigned">
+              <header>
+                <span>Assigned</span>
+                <strong id="assigned-count">0</strong>
+              </header>
+              <div class="task-list" id="assigned-tasks"></div>
+            </section>
+            <section class="task-column" data-task-status="running">
+              <header>
+                <span>Running</span>
+                <strong id="running-count">0</strong>
+              </header>
+              <div class="task-list" id="running-tasks"></div>
+            </section>
+            <section class="task-column" data-task-status="completed">
+              <header>
+                <span>Completed</span>
+                <strong id="completed-count">0</strong>
+              </header>
+              <div class="task-list" id="completed-tasks"></div>
+            </section>
+          </div>
         </div>
-
-        <form class="doc-upload is-hidden" id="doc-form">
-          <h3>Add Task Documentation</h3>
-          <label>
-            Title
-            <input type="text" name="title" required />
-          </label>
-          <label>
-            Category
-            <input type="text" name="category" placeholder="DevOps, Kubernetes, Internship..." />
-          </label>
-          <label>
-            Documentation notes
-            <textarea name="content" rows="8" placeholder="Optional notes about this PDF or task"></textarea>
-          </label>
-          <label>
-            PDF document
-            <input type="file" name="pdf" accept="application/pdf,.pdf" />
-          </label>
-          <button class="btn" type="submit">Publish Doc</button>
-        </form>
-
-        <div class="doc-list" id="doc-list"></div>
       </section>
 
       <p class="form-message" id="form-message" role="status"></p>

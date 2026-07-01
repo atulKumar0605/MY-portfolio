@@ -10,20 +10,8 @@ const cursorDot = document.querySelector(".cursor-dot");
 const cursorGlow = document.querySelector(".cursor-glow");
 const scrollProgress = document.querySelector(".scroll-progress span");
 const backTop = document.querySelector(".back-top");
-const loginForm = document.querySelector("#login-form");
-const registerForm = document.querySelector("#register-form");
-const logoutButton = document.querySelector("#logout-button");
 const docsDashboard = document.querySelector("#docs-dashboard");
-const authSection = document.querySelector("#auth-section");
 const userStatus = document.querySelector("#user-status");
-const profileButton = document.querySelector("#profile-button");
-const profilePanel = document.querySelector("#profile-panel");
-const profileAvatar = document.querySelector("#profile-avatar");
-const profileName = document.querySelector("#profile-name");
-const profileRole = document.querySelector("#profile-role");
-const profileDetailName = document.querySelector("#profile-detail-name");
-const profileDetailEmail = document.querySelector("#profile-detail-email");
-const profileDetailRole = document.querySelector("#profile-detail-role");
 const docForm = document.querySelector("#doc-form");
 const docList = document.querySelector("#doc-list");
 const docSearch = document.querySelector("#doc-search");
@@ -31,6 +19,17 @@ const docCategory = document.querySelector("#doc-category");
 const docCount = document.querySelector("#doc-count");
 const pdfCount = document.querySelector("#pdf-count");
 const categoryCount = document.querySelector("#category-count");
+const dashboardTabs = document.querySelectorAll("[data-dashboard-tab]");
+const docsPanel = document.querySelector("#docs-panel");
+const tasksPanel = document.querySelector("#tasks-panel");
+const assignTaskButton = document.querySelector("#assign-task-button");
+const taskForm = document.querySelector("#task-form");
+const assignedTasks = document.querySelector("#assigned-tasks");
+const runningTasks = document.querySelector("#running-tasks");
+const completedTasks = document.querySelector("#completed-tasks");
+const assignedCount = document.querySelector("#assigned-count");
+const runningCount = document.querySelector("#running-count");
+const completedCount = document.querySelector("#completed-count");
 const formMessage = document.querySelector("#form-message");
 const themeButtons = document.querySelectorAll("[data-theme-choice]");
 const animationLab = document.querySelector("[data-animation-mode]");
@@ -42,6 +41,7 @@ const resumeModal = document.querySelector("[data-resume-modal]");
 const resumeCloseButtons = document.querySelectorAll("[data-resume-close]");
 const systemTheme = window.matchMedia("(prefers-color-scheme: light)");
 let allDocs = [];
+let allTasks = [];
 const isFileProtocol = window.location.protocol === "file:";
 const localServerUrl = "http://localhost:3000/docs.html";
 const animationModes = [
@@ -305,25 +305,15 @@ const setMessage = (message) => {
   }
 };
 
-const getInitials = (name) =>
-  String(name || "User")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || "U";
-
 const getNetworkMessage = (error) => {
   if (isFileProtocol) {
-    return `Login/register needs the Node server. Open ${localServerUrl} instead of this file path.`;
+    return `This task workspace needs the Node server. Open ${localServerUrl} instead of this file path.`;
   }
   if (error instanceof TypeError && error.message === "Failed to fetch") {
     return "Could not connect to the server. Start it with npm start, then open http://localhost:3000/docs.html.";
   }
   return error.message;
 };
-
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || ""));
 
 const clearFormErrors = (form) => {
   form?.querySelectorAll(".field-error").forEach((error) => error.remove());
@@ -336,45 +326,6 @@ const showFieldError = (field, message) => {
   error.className = "field-error";
   error.textContent = message;
   field.closest("label")?.append(error);
-};
-
-const validateAuthForm = (form, mode) => {
-  clearFormErrors(form);
-  const formData = new FormData(form);
-  const name = String(formData.get("name") || "").trim();
-  const email = String(formData.get("email") || "").trim();
-  const password = String(formData.get("password") || "");
-  const errors = [];
-
-  if (mode === "register" && !name) {
-    errors.push(["name", "Name field is empty."]);
-  }
-  if (!email) {
-    errors.push(["email", "Email field is empty."]);
-  } else if (!isValidEmail(email)) {
-    errors.push(["email", "Please enter a valid email address."]);
-  }
-  if (!password) {
-    errors.push(["password", "Password field is empty."]);
-  } else if (mode === "register" && password.length < 8) {
-    errors.push(["password", "Password must be at least 8 characters."]);
-  }
-
-  errors.forEach(([nameAttr, message]) => {
-    const field = form.querySelector(`[name="${nameAttr}"]`);
-    if (field) {
-      showFieldError(field, message);
-    }
-  });
-
-  if (errors.length) {
-    const firstError = errors[0][1];
-    setMessage(firstError);
-    form.querySelector(".invalid")?.focus();
-    return null;
-  }
-
-  return { name, email, password };
 };
 
 const formatDate = (value) =>
@@ -416,6 +367,25 @@ const readPdfFile = (file) =>
       })
     );
     reader.addEventListener("error", () => reject(new Error("Could not read the PDF file.")));
+    reader.readAsDataURL(file);
+  });
+
+const readTaskAttachment = (file) =>
+  new Promise((resolve, reject) => {
+    if (!file || !file.name) {
+      resolve(null);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.addEventListener("load", () =>
+      resolve({
+        attachmentName: file.name,
+        attachmentType: file.type || "application/octet-stream",
+        attachmentData: reader.result
+      })
+    );
+    reader.addEventListener("error", () => reject(new Error("Could not read the attachment.")));
     reader.readAsDataURL(file);
   });
 
@@ -530,120 +500,197 @@ const loadDocs = async () => {
 docSearch?.addEventListener("input", applyDocFilters);
 docCategory?.addEventListener("change", applyDocFilters);
 
-const showSession = async (user) => {
-  if (!authSection || !docsDashboard || !userStatus || !docForm) {
-    return;
-  }
-
-  if (!user) {
-    authSection.classList.remove("is-hidden");
-    docsDashboard.classList.add("is-hidden");
-    docForm.classList.add("is-hidden");
-    profilePanel?.classList.add("is-hidden");
-    return;
-  }
-
-  authSection.classList.add("is-hidden");
-  docsDashboard.classList.remove("is-hidden");
-  userStatus.textContent = `Logged in as ${user.name}`;
-  if (profileAvatar) {
-    profileAvatar.textContent = getInitials(user.name);
-  }
-  if (profileName) {
-    profileName.textContent = user.name;
-  }
-  if (profileRole) {
-    profileRole.textContent = user.role === "admin" ? "Admin access" : "Reader access";
-  }
-  if (profileDetailName) {
-    profileDetailName.textContent = user.name;
-  }
-  if (profileDetailEmail) {
-    profileDetailEmail.textContent = user.email;
-  }
-  if (profileDetailRole) {
-    profileDetailRole.textContent = user.role === "admin" ? "Admin - can upload documents" : "User - can view documents";
-  }
-  docForm.classList.toggle("is-hidden", user.role !== "admin");
-  await loadDocs();
+const taskLabels = {
+  assigned: "Assigned",
+  running: "Running",
+  completed: "Completed"
 };
 
-profileButton?.addEventListener("click", () => {
-  const isOpen = profilePanel?.classList.toggle("is-hidden") === false;
-  profileButton.setAttribute("aria-expanded", String(isOpen));
+const taskTargets = {
+  assigned: assignedTasks,
+  running: runningTasks,
+  completed: completedTasks
+};
+
+const taskCounters = {
+  assigned: assignedCount,
+  running: runningCount,
+  completed: completedCount
+};
+
+const formatDueDate = (value) => {
+  if (!value) {
+    return "No due date";
+  }
+  return new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(new Date(`${value}T00:00:00`));
+};
+
+const renderTasks = (tasks) => {
+  Object.entries(taskTargets).forEach(([status, target]) => {
+    if (!target) {
+      return;
+    }
+
+    const statusTasks = tasks.filter((task) => task.status === status);
+    if (taskCounters[status]) {
+      taskCounters[status].textContent = String(statusTasks.length);
+    }
+
+    if (!statusTasks.length) {
+      target.innerHTML = `<article class="task-empty">No ${taskLabels[status].toLowerCase()} tasks.</article>`;
+      return;
+    }
+
+    target.innerHTML = statusTasks
+      .map((task) => {
+        const actions =
+          task.status === "assigned"
+            ? `<button type="button" data-task-id="${escapeHtml(task.id)}" data-task-status="running">Start</button>`
+            : "";
+        const completionForm =
+          task.status === "running"
+            ? `
+              <form class="task-complete-form" data-complete-task-id="${escapeHtml(task.id)}">
+                <label>
+                  Completion documentation
+                  <textarea name="completionNote" rows="4" placeholder="Write what was completed, commands used, or proof of work..." required></textarea>
+                </label>
+                <button type="submit">Complete Task</button>
+              </form>
+            `
+            : "";
+        const completionNote =
+          task.status === "completed" && task.completionNote
+            ? `
+              <div class="task-completion-note">
+                <strong>Completion documentation</strong>
+                <p>${escapeHtml(task.completionNote)}</p>
+              </div>
+            `
+            : "";
+        const attachment = task.attachment
+          ? `
+            <div class="task-attachment">
+              ${
+                task.attachment.mimeType?.startsWith("image/")
+                  ? `<img src="${escapeHtml(task.attachment.url)}" alt="${escapeHtml(task.attachment.originalName)} preview" loading="lazy" />`
+                  : ""
+              }
+              <a href="${escapeHtml(task.attachment.url)}" target="_blank" rel="noreferrer">
+                Open attachment
+              </a>
+              <small>${escapeHtml(task.attachment.originalName)}</small>
+            </div>
+          `
+          : "";
+
+        return `
+          <article class="task-card">
+            <span>${escapeHtml(taskLabels[task.status] || "Assigned")}</span>
+            <h3>${escapeHtml(task.title)}</h3>
+            <p>${escapeHtml(task.description || "No task details added.")}</p>
+            <div class="task-meta">
+              <small>Assigned to ${escapeHtml(task.assignee || "Atul Kumar")}</small>
+              <small>Due ${escapeHtml(formatDueDate(task.dueDate))}</small>
+            </div>
+            ${attachment}
+            <div class="task-actions">${actions}</div>
+            ${completionForm}
+            ${completionNote}
+          </article>
+        `;
+      })
+      .join("");
+  });
+
+  document.querySelectorAll("[data-task-id][data-task-status]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      try {
+        await apiRequest(`/api/tasks/${button.dataset.taskId}/status`, {
+          method: "PATCH",
+          body: JSON.stringify({ status: button.dataset.taskStatus })
+        });
+        setMessage(`Task moved to ${taskLabels[button.dataset.taskStatus]}.`);
+        await loadTasks();
+      } catch (error) {
+        setMessage(getNetworkMessage(error));
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-complete-task-id]").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearFormErrors(form);
+      const noteField = form.querySelector("[name='completionNote']");
+      const completionNote = String(noteField?.value || "").trim();
+      if (!completionNote) {
+        showFieldError(noteField, "Completion documentation is required.");
+        setMessage("Add completion documentation before moving this task to Completed.");
+        return;
+      }
+
+      try {
+        await apiRequest(`/api/tasks/${form.dataset.completeTaskId}/status`, {
+          method: "PATCH",
+          body: JSON.stringify({ status: "completed", completionNote })
+        });
+        setMessage("Task completed with documentation.");
+        await loadTasks();
+      } catch (error) {
+        setMessage(getNetworkMessage(error));
+      }
+    });
+  });
+};
+
+const loadTasks = async () => {
+  const { tasks } = await apiRequest("/api/tasks");
+  allTasks = tasks.map((task) => ({ ...task, status: task.status || "assigned" }));
+  renderTasks(allTasks);
+};
+
+const showDashboardPanel = (panelName) => {
+  dashboardTabs.forEach((tab) => {
+    tab.classList.toggle("active", tab.dataset.dashboardTab === panelName);
+  });
+  docsPanel?.classList.toggle("is-hidden", panelName !== "docs");
+  tasksPanel?.classList.toggle("is-hidden", panelName !== "tasks");
+};
+
+dashboardTabs.forEach((tab) => {
+  tab.addEventListener("click", async () => {
+    const panelName = tab.dataset.dashboardTab;
+    showDashboardPanel(panelName);
+    if (panelName === "tasks") {
+      await loadTasks();
+    }
+  });
+});
+
+assignTaskButton?.addEventListener("click", () => {
+  showDashboardPanel("tasks");
+  taskForm?.classList.toggle("is-hidden");
 });
 
 const initDocsPage = async () => {
-  if (!loginForm && !registerForm) {
+  if (!docsDashboard) {
     return;
   }
 
   if (isFileProtocol) {
-    setMessage(`You opened this as a file. Start the server and open ${localServerUrl} for login/register.`);
+    setMessage(`You opened this as a file. Start the server and open ${localServerUrl}.`);
     return;
   }
 
   try {
-    const { user } = await apiRequest("/api/me");
-    await showSession(user);
+    showDashboardPanel("docs");
+    await loadDocs();
+    await loadTasks();
   } catch (error) {
     setMessage(getNetworkMessage(error));
   }
 };
-
-loginForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const payload = validateAuthForm(loginForm, "login");
-  if (!payload) {
-    return;
-  }
-  if (isFileProtocol) {
-    setMessage(`Login needs the server. Open ${localServerUrl}.`);
-    return;
-  }
-
-  try {
-    const { user } = await apiRequest("/api/login", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    setMessage("Login successful.");
-    clearFormErrors(loginForm);
-    await showSession(user);
-  } catch (error) {
-    setMessage(getNetworkMessage(error));
-  }
-});
-
-registerForm?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const payload = validateAuthForm(registerForm, "register");
-  if (!payload) {
-    return;
-  }
-  if (isFileProtocol) {
-    setMessage(`Register needs the server. Open ${localServerUrl}.`);
-    return;
-  }
-
-  try {
-    const { user } = await apiRequest("/api/register", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-    setMessage("Registration successful.");
-    clearFormErrors(registerForm);
-    await showSession(user);
-  } catch (error) {
-    setMessage(getNetworkMessage(error));
-  }
-});
-
-logoutButton?.addEventListener("click", async () => {
-  await apiRequest("/api/logout", { method: "POST", body: "{}" });
-  setMessage("Logged out.");
-  await showSession(null);
-});
 
 docForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -666,6 +713,32 @@ docForm?.addEventListener("submit", async (event) => {
     await loadDocs();
   } catch (error) {
     setMessage(error.message);
+  }
+});
+
+taskForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const formData = new FormData(taskForm);
+  try {
+    const attachment = await readTaskAttachment(formData.get("attachment"));
+    const payload = {
+      title: formData.get("title"),
+      assignee: formData.get("assignee"),
+      dueDate: formData.get("dueDate"),
+      description: formData.get("description"),
+      ...(attachment || {})
+    };
+
+    await apiRequest("/api/tasks", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    taskForm.reset();
+    taskForm.classList.add("is-hidden");
+    setMessage("Task assigned.");
+    await loadTasks();
+  } catch (error) {
+    setMessage(getNetworkMessage(error));
   }
 });
 

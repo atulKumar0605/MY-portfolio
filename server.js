@@ -9,6 +9,7 @@ const DATA_DIR = path.join(__dirname, "data");
 const UPLOAD_DIR = path.join(DATA_DIR, "uploads");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const DOCS_FILE = path.join(DATA_DIR, "task-docs.json");
+const TASKS_FILE = path.join(DATA_DIR, "tasks.json");
 const SESSION_TTL_MS = 1000 * 60 * 60 * 8;
 const MAX_BODY_BYTES = Number(process.env.MAX_BODY_BYTES || 20 * 1024 * 1024);
 const sessions = new Map();
@@ -16,6 +17,8 @@ const sessions = new Map();
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".pdf": "application/pdf",
@@ -29,6 +32,7 @@ async function ensureData() {
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   await ensureJsonFile(USERS_FILE, []);
   await ensureJsonFile(DOCS_FILE, []);
+  await ensureJsonFile(TASKS_FILE, []);
 
   const users = await readJson(USERS_FILE);
   if (!users.some((user) => user.role === "admin")) {
@@ -152,6 +156,11 @@ function publicUser(user) {
   };
 }
 
+function normalizeTaskStatus(status) {
+  const value = String(status || "assigned").trim().toLowerCase();
+  return ["assigned", "running", "completed"].includes(value) ? value : "assigned";
+}
+
 function sanitizeFileName(fileName) {
   return String(fileName || "task-document.pdf")
     .replace(/[^a-z0-9_.-]/gi, "-")
@@ -174,12 +183,17 @@ function decodePdfData(fileData) {
   return buffer;
 }
 
-async function sendProtectedPdf(req, res, docId) {
-  const user = await getSessionUser(req);
-  if (!user) {
-    return sendError(res, 401, "Please log in to access this PDF.");
+function decodeFileData(fileData) {
+  if (!fileData) {
+    return null;
   }
 
+  const data = String(fileData);
+  const base64 = data.includes(",") ? data.split(",").pop() : data;
+  return Buffer.from(base64, "base64");
+}
+
+async function sendProtectedPdf(req, res, docId) {
   const docs = await readJson(DOCS_FILE);
   const doc = docs.find((item) => item.id === docId);
   if (!doc?.pdf?.storedName) {
@@ -191,6 +205,24 @@ async function sendProtectedPdf(req, res, docId) {
   const fileName = sanitizeFileName(doc.pdf.originalName);
   res.writeHead(200, {
     "Content-Type": "application/pdf",
+    "Content-Disposition": `inline; filename="${fileName}"`,
+    "Content-Length": data.length
+  });
+  return res.end(data);
+}
+
+async function sendTaskAttachment(req, res, taskId) {
+  const tasks = await readJson(TASKS_FILE);
+  const task = tasks.find((item) => item.id === taskId);
+  if (!task?.attachment?.storedName) {
+    return sendError(res, 404, "Attachment not found.");
+  }
+
+  const filePath = path.join(UPLOAD_DIR, task.attachment.storedName);
+  const data = await fs.readFile(filePath);
+  const fileName = sanitizeFileName(task.attachment.originalName);
+  res.writeHead(200, {
+    "Content-Type": task.attachment.mimeType || "application/octet-stream",
     "Content-Disposition": `inline; filename="${fileName}"`,
     "Content-Length": data.length
   });
@@ -219,95 +251,19 @@ async function handleApi(req, res, pathname) {
     return sendProtectedPdf(req, res, pdfMatch[1]);
   }
 
-  if (pathname === "/api/register" && req.method === "POST") {
-    const body = await parseBody(req);
-    const name = String(body.name || "").trim();
-    const email = String(body.email || "").trim().toLowerCase();
-    const password = String(body.password || "");
-
-    if (!name) {
-      return sendError(res, 400, "Name field is empty.");
-    }
-    if (!email) {
-      return sendError(res, 400, "Email field is empty.");
-    }
-    if (!isValidEmail(email)) {
-      return sendError(res, 400, "Please enter a valid email address.");
-    }
-    if (!password) {
-      return sendError(res, 400, "Password field is empty.");
-    }
-    if (password.length < 8) {
-      return sendError(res, 400, "Password must be at least 8 characters.");
-    }
-
-    const users = await readJson(USERS_FILE);
-    if (users.some((user) => user.email === email)) {
-      return sendError(res, 409, "This email is already registered.");
-    }
-
-    const user = createUser(email, password, name);
-    users.push(user);
-    await writeJson(USERS_FILE, users);
-    setSessionCookie(res, createSession(user));
-    return sendJson(res, 201, { user: publicUser(user) });
+  const taskAttachmentMatch = pathname.match(/^\/api\/tasks\/([a-f0-9-]+)\/file$/i);
+  if (taskAttachmentMatch && req.method === "GET") {
+    return sendTaskAttachment(req, res, taskAttachmentMatch[1]);
   }
 
-  if (pathname === "/api/login" && req.method === "POST") {
-    const body = await parseBody(req);
-    const email = String(body.email || "").trim().toLowerCase();
-    const password = String(body.password || "");
-
-    if (!email) {
-      return sendError(res, 400, "Email field is empty.");
-    }
-    if (!isValidEmail(email)) {
-      return sendError(res, 400, "Please enter a valid email address.");
-    }
-    if (!password) {
-      return sendError(res, 400, "Password field is empty.");
-    }
-
-    const users = await readJson(USERS_FILE);
-    const user = users.find((item) => item.email === email);
-    if (!user) {
-      return sendError(res, 401, "No account found with this email.");
-    }
-    if (!verifyPassword(password, user)) {
-      return sendError(res, 401, "Wrong password. Please try again.");
-    }
-
-    setSessionCookie(res, createSession(user));
-    return sendJson(res, 200, { user: publicUser(user) });
-  }
-
-  if (pathname === "/api/logout" && req.method === "POST") {
-    clearSessionCookie(req, res);
-    return sendJson(res, 200, { ok: true });
-  }
-
-  if (pathname === "/api/me" && req.method === "GET") {
-    return sendJson(res, 200, { user: publicUser(await getSessionUser(req)) });
-  }
+  const taskStatusMatch = pathname.match(/^\/api\/tasks\/([a-f0-9-]+)\/status$/i);
 
   if (pathname === "/api/docs" && req.method === "GET") {
-    const user = await getSessionUser(req);
-    if (!user) {
-      return sendError(res, 401, "Please log in to access task documentation.");
-    }
     const docs = await readJson(DOCS_FILE);
     return sendJson(res, 200, { docs: docs.sort((a, b) => b.createdAt.localeCompare(a.createdAt)) });
   }
 
   if (pathname === "/api/docs" && req.method === "POST") {
-    const user = await getSessionUser(req);
-    if (!user) {
-      return sendError(res, 401, "Please log in first.");
-    }
-    if (user.role !== "admin") {
-      return sendError(res, 403, "Only Atul can upload task documentation.");
-    }
-
     const { title, category, content, fileName, fileData } = await parseBody(req);
     if (!title || (!content && !fileData)) {
       return sendError(res, 400, "Title and documentation text or a PDF file is required.");
@@ -335,11 +291,80 @@ async function handleApi(req, res, pathname) {
       category: String(category || "General").trim(),
       content: String(content || "").trim(),
       pdf,
-      author: user.name,
+      author: "Atul Kumar",
       createdAt: new Date().toISOString()
     });
     await writeJson(DOCS_FILE, docs);
     return sendJson(res, 201, { ok: true });
+  }
+
+  if (pathname === "/api/tasks" && req.method === "GET") {
+    const tasks = await readJson(TASKS_FILE);
+    return sendJson(res, 200, { tasks: tasks.sort((a, b) => b.createdAt.localeCompare(a.createdAt)) });
+  }
+
+  if (pathname === "/api/tasks" && req.method === "POST") {
+    const { title, assignee, dueDate, description, attachmentName, attachmentType, attachmentData } = await parseBody(req);
+    if (!String(title || "").trim()) {
+      return sendError(res, 400, "Task title is required.");
+    }
+
+    const tasks = await readJson(TASKS_FILE);
+    const id = crypto.randomUUID();
+    let attachment = null;
+    if (attachmentData) {
+      const attachmentBuffer = decodeFileData(attachmentData);
+      const originalName = sanitizeFileName(attachmentName || "task-attachment");
+      const storedName = `${id}-${originalName}`;
+      await fs.writeFile(path.join(UPLOAD_DIR, storedName), attachmentBuffer);
+      attachment = {
+        originalName,
+        storedName,
+        mimeType: String(attachmentType || "application/octet-stream"),
+        size: attachmentBuffer.length,
+        url: `/api/tasks/${id}/file`
+      };
+    }
+
+    tasks.push({
+      id,
+      title: String(title).trim(),
+      assignee: String(assignee || "Atul Kumar").trim(),
+      dueDate: String(dueDate || "").trim(),
+      description: String(description || "").trim(),
+      attachment,
+      status: "assigned",
+      assignedBy: "Atul Kumar",
+      completionNote: "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    });
+    await writeJson(TASKS_FILE, tasks);
+    return sendJson(res, 201, { ok: true });
+  }
+
+  if (taskStatusMatch && req.method === "PATCH") {
+    const { status, completionNote } = await parseBody(req);
+    const tasks = await readJson(TASKS_FILE);
+    const task = tasks.find((item) => item.id === taskStatusMatch[1]);
+    if (!task) {
+      return sendError(res, 404, "Task not found.");
+    }
+
+    const nextStatus = normalizeTaskStatus(status);
+    if (nextStatus === "completed") {
+      const note = String(completionNote || "").trim();
+      if (!note) {
+        return sendError(res, 400, "Completion documentation is required before moving this task to completed.");
+      }
+      task.completionNote = note;
+      task.completedAt = new Date().toISOString();
+    }
+
+    task.status = nextStatus;
+    task.updatedAt = new Date().toISOString();
+    await writeJson(TASKS_FILE, tasks);
+    return sendJson(res, 200, { ok: true });
   }
 
   return sendError(res, 404, "API route not found.");
